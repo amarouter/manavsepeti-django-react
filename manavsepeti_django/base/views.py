@@ -1,8 +1,10 @@
-from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 
 # Create your views here.
 
+@api_view(['GET'])
 def get_routes(request):
     routes = [
         '/api/v1/products',
@@ -14,4 +16,4 @@ def get_routes(request):
         '/api/v1/products/<id>/reviews',
         '/api/v1/products/top',
     ]
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
