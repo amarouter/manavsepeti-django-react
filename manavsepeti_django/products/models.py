@@ -10,7 +10,7 @@ class Product(models.Model):
     category = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     origin = models.CharField(max_length=100, blank=True, null=True)
-    # image =
+    image = models.ImageField(blank=True, null=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     count_in_stock = models.IntegerField(blank=True, null=True, default=0)
     created_at = models.DateTimeField(auto_now_add=True)

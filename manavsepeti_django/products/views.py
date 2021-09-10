@@ -10,6 +10,7 @@ from .products import products
 def get_products(request):
     return Response(products)
 
+
 @api_view(['GET'])
 def get_product(request, pk):
     product = None
