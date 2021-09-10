@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import ProductCard from "../components/ProductCard";
+import axios from "axios";
 
-import products from "../products";
+import { DJANGO_URL } from "../constants/appConstants";
 
 const HomeScreen = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data } = await axios.get(`${DJANGO_URL}/api/v1/products/`);
+      setProducts(data);
+    }
+
+    fetchProducts()
+  }, []);
+
   return (
     <div>
       <h2>Meyve Sebze</h2>
@@ -17,6 +29,6 @@ const HomeScreen = () => {
       </Row>
     </div>
   );
-}
+};
 
 export default HomeScreen;

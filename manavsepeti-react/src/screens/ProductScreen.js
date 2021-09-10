@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Row,
@@ -9,10 +9,24 @@ import {
   Card,
   ListGroupItem,
 } from "react-bootstrap";
-import products from "../products";
+import axios from "axios";
+
+import { DJANGO_URL } from "../constants/appConstants";
 
 const ProductScreen = ({ match }) => {
-  const product = products.find((p) => p._id === match.params.id);
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const { data } = await axios.get(
+        `${DJANGO_URL}/api/v1/products/${match.params.id}`
+      );
+      setProduct(data);
+    }
+
+    fetchProduct();
+  }, [match.params.id]);
+
   return (
     <div>
       <Link to="/" className="btn btn-dark my-3">
@@ -48,14 +62,14 @@ const ProductScreen = ({ match }) => {
                 <Row>
                   <Col>Stok:</Col>
                   <Col>
-                    {product.countInStock > 0 ? "Mevcut" : "Stokta Yok"}
+                    {product.count_in_stock > 0 ? "Mevcut" : "Stokta Yok"}
                   </Col>
                 </Row>
               </ListGroupItem>
               <ListGroupItem>
                 <Button
                   className="btn-block"
-                  disabled={product.countInStock == 0}
+                  disabled={product.count_in_stock === 0}
                   type="button"
                 >
                   Sepete Ekle
@@ -67,6 +81,6 @@ const ProductScreen = ({ match }) => {
       </Row>
     </div>
   );
-}
+};
 
 export default ProductScreen;
