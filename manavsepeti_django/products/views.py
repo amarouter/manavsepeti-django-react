@@ -19,13 +19,12 @@ def get_products(request):
 def get_product(request, pk):
     product = None
     try:
-        product = Product.objects.get(_id=pk)
+        product = Product.objects.get(pk=pk)
     except:
+        # is generally Product.DoesNotExist
         pass
-    
-    serializer = None
-    if product:
-        serializer = ProductSerializer(product, many=False)
+
+    serializer = ProductSerializer(product, many=False) if product else None
 
     data = serializer.data if serializer else None
     return Response(data)
