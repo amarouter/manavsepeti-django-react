@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Product
 # from .products import products
@@ -20,11 +21,10 @@ def get_product(request, pk):
     product = None
     try:
         product = Product.objects.get(pk=pk)
+        serializer = ProductSerializer(
+            product, many=False) if product else None
+        data = serializer.data if serializer else None
+        return Response(data)
     except:
-        # is generally Product.DoesNotExist
-        pass
-
-    serializer = ProductSerializer(product, many=False) if product else None
-
-    data = serializer.data if serializer else None
-    return Response(data)
+        data = {'message': 'Product with this id does not exist.'}
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
