@@ -58,8 +58,8 @@ def register_user(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except:
-        message = 'User with this email already exists'
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        data = {'message': 'User with this email already exists'}
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

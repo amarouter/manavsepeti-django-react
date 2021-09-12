@@ -26,5 +26,5 @@ def get_product(request, pk):
         data = serializer.data if serializer else None
         return Response(data)
     except:
-        message = 'Product with this id does not exist.'
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        data = {'message': 'Product with this id does not exist.'}
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
