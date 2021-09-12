@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -60,6 +60,24 @@ def register_user(request):
     except:
         data = {'message': 'User with this email already exists'}
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request):
+    user = request.user
+    serializer = UserSerializerWithToken(user, many=False)
+
+    data = request.data
+    user.first_name = data['name']
+    user.username = data['email']
+    user.email = data['email']
+
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+
+    user.save()
+    return Response(serializer.data)
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
